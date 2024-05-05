@@ -1,5 +1,5 @@
 import MainLayout from "../../layouts/main";
-import App from "../../App.tsx";
+import Dashboard from "../../pages/dashboard";
 
 export default {
   path: "/",
@@ -7,7 +7,7 @@ export default {
   children: [
     {
       path: "",
-      element: <App />,
+      element: <Dashboard />,
     },
   ],
 };
