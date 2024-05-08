@@ -3,10 +3,11 @@ import { useQuery } from "@apollo/client";
 import { GET_GAMES } from "../../api/games";
 import { useEffect, useState } from "react";
 import { Game } from "../../types/game";
+import Alert from "../../components/alert";
 
 const Games = () => {
   const { loading, error, data } = useQuery(GET_GAMES, {
-    variables: { skip: 0 },
+    variables: { skip: 0, take: 10 },
     pollInterval: 2000,
   });
   const [games, setGames] = useState<Game[]>([]);
@@ -16,7 +17,7 @@ const Games = () => {
   }, [data]);
 
   if (loading) return null;
-  if (error) return `Error! ${error}`;
+  if (error) return <Alert message={error?.message} />;
 
   return (
     <div>
@@ -49,7 +50,7 @@ const Games = () => {
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                 >
                   {Object.keys(game).map((key: string) => (
-                    <td key={game[key as keyof Game]} className="px-6 py-4">
+                    <td key={key} className="px-6 py-4">
                       {game[key as keyof Game]}
                     </td>
                   ))}
