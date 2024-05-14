@@ -6,10 +6,11 @@ const MainLayout = () => {
   function handleOpenAside() {
     setSetSize(size == 100 ? 250 : 100);
   }
+  console.log("rerender");
   return (
     <div className="flex w-full">
       <aside
-        className={`flex justify-center transition-all bg-amber-800 h-auto w-[${size}px]`}
+        className={`flex justify-center transition-all bg-amber-800 h-screen w-[${size}px]`}
       >
         <ul className="bg-amber-800">
           <li onClick={handleOpenAside} className="cursor-pointer">

@@ -1,13 +1,21 @@
 import { gql } from "@apollo/client";
 
 export const GET_GAMES = gql`
-  query GetGames($skip: Float!, $take: Float!) {
-    index(params: { skip: $skip, take: $take }) {
-      id
-      name
-      slug
-      year
-      description
+  query GetGames($page: Int!, $perPage: Int!) {
+    all(params: { page: $page, perPage: $perPage }) {
+      list {
+        id
+        name
+        slug
+        year
+        description
+      }
+      pagination {
+        page
+        count
+        perPage
+        countPages
+      }
     }
   }
 `;

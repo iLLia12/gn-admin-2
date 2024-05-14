@@ -4,16 +4,41 @@ import { GET_GAMES } from "../../api/games";
 import { useEffect, useState } from "react";
 import { Game } from "../../types/game";
 import Alert from "../../components/alert";
+import Pagination from "../../components/table/pagination";
+import { Pagination as PaginationType } from "../../types/pagination";
+
+const PAGINATION_DEFAULT = {
+  count: 0,
+  perPage: 10,
+  page: 1,
+  countPages: 0,
+};
 
 const Games = () => {
-  const { loading, error, data } = useQuery(GET_GAMES, {
-    variables: { skip: 0, take: 10 },
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const { loading, error, data, refetch } = useQuery(GET_GAMES, {
+    variables: { page, perPage },
     pollInterval: 2000,
   });
   const [games, setGames] = useState<Game[]>([]);
+  const [pagination, setPagination] =
+    useState<PaginationType>(PAGINATION_DEFAULT);
+
+  async function handlePageChange(page: string) {
+    setPage(+page);
+    await refetch();
+  }
+
+  function handlePerPageChange(perPage: number) {
+    setPerPage(perPage);
+  }
 
   useEffect(() => {
-    if (data) setGames(data.index);
+    if (data) {
+      setGames(data.all.list);
+      setPagination(data.all.pagination);
+    }
   }, [data]);
 
   if (loading) return null;
@@ -60,6 +85,12 @@ const Games = () => {
           </table>
         )}
       </div>
+      <Pagination
+        count={pagination.count}
+        onPageChange={handlePageChange}
+        countPages={pagination.countPages}
+        onPerPageChange={handlePerPageChange}
+      />
     </div>
   );
 };
