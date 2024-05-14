@@ -30,8 +30,10 @@ const Games = () => {
     await refetch();
   }
 
-  function handlePerPageChange(perPage: number) {
+  async function handlePerPageChange(perPage: number) {
     setPerPage(perPage);
+    setPage(1);
+    await refetch();
   }
 
   useEffect(() => {

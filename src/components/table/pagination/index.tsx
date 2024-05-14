@@ -1,5 +1,5 @@
 import { Align } from "./types.ts";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import useQueryParams from "../../../hooks/query-params";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,9 +15,9 @@ const Pagination = ({
   onPageChange: (page: string) => void;
   count: number; // count all items in the DB
   countPages?: number;
-  perPage?: number;
   align?: Align;
 }) => {
+  const [perPage, setPerPage] = useState(10);
   const { params } = useQueryParams();
   const [searchParams, setSearchParams] = useSearchParams({});
 
@@ -61,23 +61,44 @@ const Pagination = ({
     onPageChange(page);
   }
 
+  function handlePerPageChange(e: ChangeEvent<HTMLSelectElement>) {
+    setPerPage(+e.target.value);
+    onPerPageChange(+e.target.value);
+  }
+
   return (
     <div className={`flex ${align}`}>
       <div className="pt-4">
         <span className="text-sm text-gray-700 dark:text-gray-400">
-          Showing{" "}
-          <span className="font-semibold text-gray-900 dark:text-white">1</span>{" "}
-          to{" "}
-          <span className="font-semibold text-gray-900 dark:text-white">
+          Showing
+          <span className="font-semibold text-gray-900 dark:text-white px-1">
+            1
+          </span>
+          to
+          <span className="font-semibold text-gray-900 dark:text-white px-1">
             10
-          </span>{" "}
-          of{" "}
-          <span className="font-semibold text-gray-900 dark:text-white">
+          </span>
+          of
+          <span className="font-semibold text-gray-900 dark:text-white px-1">
             {count}
-          </span>{" "}
+          </span>
           Entries
         </span>
       </div>
+      <form className="inline pt-2">
+        <select
+          value={perPage}
+          onChange={handlePerPageChange}
+          id="small"
+          className="inline p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="300">300</option>
+        </select>
+      </form>
       <nav aria-label="Page navigation example" className={`flex p-2`}>
         <ul className="inline-flex -space-x-px text-sm">
           <li>
