@@ -6,6 +6,8 @@ import { Game } from "../../types/game";
 import Alert from "../../components/alert";
 import Pagination from "../../components/table/pagination";
 import { Pagination as PaginationType } from "../../types/pagination";
+import Modal from "../../components/modal";
+import ReactPortal from "../../components/portal";
 
 const PAGINATION_DEFAULT = {
   count: 0,
@@ -15,6 +17,7 @@ const PAGINATION_DEFAULT = {
 };
 
 const Games = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const { loading, error, data, refetch } = useQuery(GET_GAMES, {
@@ -24,6 +27,10 @@ const Games = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [pagination, setPagination] =
     useState<PaginationType>(PAGINATION_DEFAULT);
+
+  function handleModalOpen() {
+    setIsModalOpen((val) => !val);
+  }
 
   async function handlePageChange(page: string) {
     setPage(+page);
@@ -84,6 +91,7 @@ const Games = () => {
                   ))}
                   <td className="px-6 py-4">
                     <button
+                      onClick={handleModalOpen}
                       type="button"
                       className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-1 text-center"
                     >
@@ -102,6 +110,9 @@ const Games = () => {
         countPages={pagination.countPages}
         onPerPageChange={handlePerPageChange}
       />
+      <ReactPortal>
+        {isModalOpen && <Modal onClose={handleModalOpen} />}
+      </ReactPortal>
     </div>
   );
 };
