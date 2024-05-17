@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import { DELETE_GAME, GET_GAMES, STORE_GAME } from "../../api/games";
+import { DELETE_GAME, GET_GAMES } from "../../api/games";
 import { useEffect, useState } from "react";
 import { Game } from "../../types/game";
 import Alert from "../../components/alert";
@@ -8,6 +8,7 @@ import Pagination from "../../components/table/pagination";
 import { Pagination as PaginationType } from "../../types/pagination";
 import Modal from "../../components/modal";
 import ReactPortal from "../../components/portal";
+import { toast } from "react-toastify";
 
 const PAGINATION_DEFAULT = {
   count: 0,
@@ -46,6 +47,7 @@ const Games = () => {
     });
     await refetch();
     setIsModalOpen(false);
+    toast("Deleted", { type: "success" });
   }
 
   async function handlePageChange(page: string) {
@@ -68,7 +70,6 @@ const Games = () => {
 
   useEffect(() => {
     if (!isModalOpen) {
-      console.log("closing");
       setGameIdToDelete(null);
     }
   }, [isModalOpen]);
