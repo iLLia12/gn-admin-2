@@ -5,24 +5,21 @@ import { useEffect, useState } from "react";
 import { Game } from "../../types/game";
 import Alert from "../../components/alert";
 import Pagination from "../../components/table/pagination";
-import { Pagination as PaginationType } from "../../types/pagination";
 import Modal from "../../components/modal";
 import ReactPortal from "../../components/portal";
 import { toast } from "react-toastify";
-
-const PAGINATION_DEFAULT = {
-  count: 0,
-  perPage: 10,
-  page: 1,
-  countPages: 0,
-};
+import SortIcon from "../../components/table/sort-icon";
+import {
+  Pagination as PaginationType,
+  PAGINATION_DEFAULT,
+} from "../../types/pagination";
 
 const Games = () => {
-  const [deleteGame, { loading: deleteGameLoading, error: deleteGameError }] =
-    useMutation(DELETE_GAME);
+  const [deleteGame] = useMutation(DELETE_GAME);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [gameIdToDelete, setGameIdToDelete] = useState<number | null>(null);
   const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState<string>("name");
   const [perPage, setPerPage] = useState(10);
   const { loading, error, data, refetch } = useQuery(GET_GAMES, {
     variables: { page, perPage },
@@ -39,6 +36,10 @@ const Games = () => {
   function handleDeleteConfirmation(id: number) {
     setGameIdToDelete(id);
     handleModalOpen();
+  }
+
+  function handleSortBy(field: string) {
+    console.log("handleSortBy: ", field);
   }
 
   async function handleOnDeleteConfirmationClick() {
@@ -95,8 +96,16 @@ const Games = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 {Object.keys(games[0]).map((item) => (
-                  <th key={item} scope="col" className="px-6 py-3">
-                    {item}
+                  <th
+                    key={item}
+                    scope="col"
+                    className="px-6 py-3 cursor-pointer"
+                    onClick={() => handleSortBy(item)}
+                  >
+                    <div className="flex items-center">
+                      {item}
+                      <SortIcon />
+                    </div>
                   </th>
                 ))}
                 <th></th>
