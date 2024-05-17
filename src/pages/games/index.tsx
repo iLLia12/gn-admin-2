@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { GET_GAMES } from "../../api/games";
+import { useQuery, useMutation } from "@apollo/client";
+import { DELETE_GAME, GET_GAMES, STORE_GAME } from "../../api/games";
 import { useEffect, useState } from "react";
 import { Game } from "../../types/game";
 import Alert from "../../components/alert";
@@ -17,7 +17,10 @@ const PAGINATION_DEFAULT = {
 };
 
 const Games = () => {
+  const [deleteGame, { loading: deleteGameLoading, error: deleteGameError }] =
+    useMutation(DELETE_GAME);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [gameIdToDelete, setGameIdToDelete] = useState<number | null>(null);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const { loading, error, data, refetch } = useQuery(GET_GAMES, {
@@ -30,6 +33,17 @@ const Games = () => {
 
   function handleModalOpen() {
     setIsModalOpen((val) => !val);
+  }
+
+  function handleDeleteConfirmation(id: number) {
+    setGameIdToDelete(id);
+    handleModalOpen();
+  }
+
+  async function handleOnDeleteConfirmationClick() {
+    await deleteGame({
+      variables: { id: gameIdToDelete },
+    });
   }
 
   async function handlePageChange(page: string) {
@@ -49,6 +63,12 @@ const Games = () => {
       setPagination(data.all.pagination);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setGameIdToDelete(null);
+    }
+  }, [isModalOpen]);
 
   if (loading) return null;
   if (error) return <Alert message={error?.message} />;
@@ -91,7 +111,7 @@ const Games = () => {
                   ))}
                   <td className="px-6 py-4">
                     <button
-                      onClick={handleModalOpen}
+                      onClick={() => handleDeleteConfirmation(game.id)}
                       type="button"
                       className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-1 text-center"
                     >
@@ -111,7 +131,12 @@ const Games = () => {
         onPerPageChange={handlePerPageChange}
       />
       <ReactPortal>
-        {isModalOpen && <Modal onClose={handleModalOpen} />}
+        {isModalOpen && (
+          <Modal
+            onClose={handleModalOpen}
+            onConfirm={handleOnDeleteConfirmationClick}
+          />
+        )}
       </ReactPortal>
     </div>
   );

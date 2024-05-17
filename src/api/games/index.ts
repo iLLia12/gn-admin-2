@@ -31,3 +31,12 @@ export const STORE_GAME = gql`
     }
   }
 `;
+
+export const DELETE_GAME = gql`
+  mutation DeleteGame($id: ID) {
+    delete(id: $id) {
+      id
+      name
+    }
+  }
+`;
