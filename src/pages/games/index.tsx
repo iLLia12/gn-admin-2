@@ -44,6 +44,8 @@ const Games = () => {
     await deleteGame({
       variables: { id: gameIdToDelete },
     });
+    await refetch();
+    setIsModalOpen(false);
   }
 
   async function handlePageChange(page: string) {
@@ -66,6 +68,7 @@ const Games = () => {
 
   useEffect(() => {
     if (!isModalOpen) {
+      console.log("closing");
       setGameIdToDelete(null);
     }
   }, [isModalOpen]);

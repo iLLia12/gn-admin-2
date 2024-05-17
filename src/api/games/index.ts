@@ -33,8 +33,8 @@ export const STORE_GAME = gql`
 `;
 
 export const DELETE_GAME = gql`
-  mutation DeleteGame($id: ID) {
-    delete(id: $id) {
+  mutation DeleteGame($id: ID!) {
+    destroy(id: $id) {
       id
       name
     }
