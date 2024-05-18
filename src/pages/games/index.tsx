@@ -19,10 +19,11 @@ const Games = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [gameIdToDelete, setGameIdToDelete] = useState<number | null>(null);
   const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState<string>("name");
+  const [orderBy, setOrderBy] = useState<string>("id");
+  const [order, setOrder] = useState<string>("asc");
   const [perPage, setPerPage] = useState(10);
   const { loading, error, data, refetch } = useQuery(GET_GAMES, {
-    variables: { page, perPage },
+    variables: { page, perPage, orderBy, order },
     pollInterval: 2000,
   });
   const [games, setGames] = useState<Game[]>([]);
@@ -38,8 +39,14 @@ const Games = () => {
     handleModalOpen();
   }
 
-  function handleSortBy(field: string) {
-    console.log("handleSortBy: ", field);
+  async function handleSortBy(field: string) {
+    if (orderBy == field) {
+      setOrder((val) => (val == "asc" ? "desc" : "asc"));
+    } else {
+      setOrderBy(field);
+      setOrder((val) => (val == "asc" ? "desc" : "asc"));
+    }
+    await refetch();
   }
 
   async function handleOnDeleteConfirmationClick() {
