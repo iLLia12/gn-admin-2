@@ -1,5 +1,6 @@
 import Games from "../../pages/games";
-import CreateGame from "../../pages/games/create";
+import Create from "../../pages/games/create";
+import Edit from "../../pages/games/edit";
 import MainLayout from "../../layouts/main";
 
 export default {
@@ -12,7 +13,11 @@ export default {
     },
     {
       path: "create",
-      element: <CreateGame />,
+      element: <Create />,
+    },
+    {
+      path: ":id/edit",
+      element: <Edit />,
     },
   ],
 };

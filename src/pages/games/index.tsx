@@ -9,12 +9,16 @@ import Modal from "../../components/modal";
 import ReactPortal from "../../components/portal";
 import { toast } from "react-toastify";
 import SortIcon from "../../components/table/sort-icon";
+import { useNavigate } from "react-router-dom";
 import {
   Pagination as PaginationType,
   PAGINATION_DEFAULT,
 } from "../../types/pagination";
+import DeleteIcon from "../../components/icons/delete";
+import EditIcon from "../../components/icons/edit";
 
 const Games = () => {
+  const navigate = useNavigate();
   const [deleteGame] = useMutation(DELETE_GAME);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [gameIdToDelete, setGameIdToDelete] = useState<number | null>(null);
@@ -37,6 +41,10 @@ const Games = () => {
   function handleDeleteConfirmation(id: number) {
     setGameIdToDelete(id);
     handleModalOpen();
+  }
+
+  function handleEdit(id: number) {
+    navigate(`${id}/edit`);
   }
 
   async function handleSortBy(field: string) {
@@ -129,14 +137,11 @@ const Games = () => {
                       {game[key as keyof Game]}
                     </td>
                   ))}
-                  <td className="px-6 py-4">
-                    <button
+                  <td className="flex px-6 py-4">
+                    <EditIcon onClick={() => handleEdit(game.id)} />
+                    <DeleteIcon
                       onClick={() => handleDeleteConfirmation(game.id)}
-                      type="button"
-                      className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-1 text-center"
-                    >
-                      Delete
-                    </button>
+                    />
                   </td>
                 </tr>
               ))}
