@@ -31,10 +31,35 @@ export const GET_GAMES = gql`
     }
   }
 `;
+
+export const GET_GAME = gql`
+  query ShowGame($id: Int!) {
+    show(id: $id) {
+      id
+      name
+      slug
+      year
+      description
+    }
+  }
+`;
+
 //StoreRequest in ($createBody: StoreRequest!) - is taken from server side schema.gql
 export const STORE_GAME = gql`
   mutation StoreGame($createBody: StoreRequest!) {
     store(createBody: $createBody) {
+      id
+      name
+      slug
+      year
+      description
+    }
+  }
+`;
+
+export const UPDATE_GAME = gql`
+  mutation UpdateGame($updateBody: UpdateRequest!) {
+    update(updateBody: $updateBody) {
       id
       name
       slug

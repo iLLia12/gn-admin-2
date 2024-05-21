@@ -6,13 +6,7 @@ import { toKebabCase } from "../../../helpers.ts";
 import Input from "../../../components/controls/input";
 import TextArea from "../../../components/controls/textarea";
 import { useNavigate } from "react-router-dom";
-
-type Inputs = {
-  name: string;
-  slug: string;
-  year: number;
-  description: string;
-};
+import { Inputs } from "../types.ts";
 
 const CreateGame = () => {
   const navigate = useNavigate();
@@ -68,6 +62,7 @@ const CreateGame = () => {
         <div className="pb-4">
           <Input
             name="slug"
+            disabled={true}
             error={errors.name}
             register={register}
             value={toKebabCase(watch("name") || "")}

@@ -7,14 +7,18 @@ const Input = ({
   rules,
   register,
   value,
+  defaultValue,
   error,
   placeholder = "",
+  disabled = false,
 }: {
   name: string;
   register: any;
   error: FieldError | undefined;
   rules?: Rules;
   value?: string | number;
+  defaultValue?: string | number;
+  disabled?: boolean;
   placeholder?: string;
 }) => {
   return (
@@ -26,9 +30,11 @@ const Input = ({
         type="text"
         id={name}
         placeholder={placeholder}
+        disabled={disabled}
         className={inputClassName(!!error)}
         aria-invalid={error ? "true" : "false"}
         value={value}
+        defaultValue={defaultValue}
         {...register(name, rules || {})}
       />
       {error && (

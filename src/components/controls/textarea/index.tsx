@@ -7,6 +7,7 @@ const TextArea = ({
   rules,
   register,
   value,
+  defaultValue,
   error,
   placeholder = "",
 }: {
@@ -16,6 +17,7 @@ const TextArea = ({
   placeholder?: string;
   rules?: Rules;
   value?: string | number;
+  defaultValue?: string | number;
 }) => {
   return (
     <>
@@ -30,6 +32,7 @@ const TextArea = ({
         aria-invalid={error ? "true" : "false"}
         {...register(name, rules || {})}
         value={value}
+        defaultValue={defaultValue}
       ></textarea>
       {error && (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">
